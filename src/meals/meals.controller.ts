@@ -1,6 +1,15 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { MealsService } from './meals.service';
-import { MealPlanDTO } from './DTO/mealPlanDTO';
+import { MealDTO } from './DTO/mealPlanDTO';
 
 @Controller('meals')
 export class MealsController {
@@ -12,19 +21,36 @@ export class MealsController {
   }
 
   @Post('create/:userId')
-  async createMeal(
-    @Param('userId') userId: string,
-    @Body() mealPlanDTO: MealPlanDTO,
-  ) {
+  async createMeal(@Param('userId') userId: string, @Body() mealDTO: MealDTO) {
     try {
-      const meal = await this.mealsService.createMeal(userId, mealPlanDTO);
-
+      const meal = await this.mealsService.createMeal(userId, mealDTO);
       return {
         message: 'Meal created successfully',
         meal,
       };
     } catch (error) {
+      console.log(error);
       return { message: 'Error creating meal', error };
+    }
+  }
+
+  @Put('update/:mealId')
+  async updateMeal(
+    @Param('mealId') mealId: string,
+    @Body() mealDTO: Partial<MealDTO>,
+  ) {
+    try {
+      const updatedMeal = await this.mealsService.updateMeal(mealId, mealDTO);
+      return {
+        message: 'Meal updated successfully',
+        updatedMeal,
+      };
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        'Error updating meal',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

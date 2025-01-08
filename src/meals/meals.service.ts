@@ -1,39 +1,54 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { MealPlanDTO } from './DTO/mealPlanDTO';
+import { MealDTO } from './DTO/mealPlanDTO';
 
 @Injectable()
 export class MealsService {
-  constructor(private readonly databaseSevervices: DatabaseService) {}
+  constructor(private readonly databaseServices: DatabaseService) {}
 
   async getMeals() {
-    return this.databaseSevervices.meals.findMany();
+    return this.databaseServices.meals.findMany();
   }
 
-  async createMeal(userId: string, mealPlanDTO: MealPlanDTO) {
+  async createMeal(userId: string, mealDTO: MealDTO) {
     try {
-      return this.databaseSevervices.meals.create({
+      const meal = await this.databaseServices.meals.create({
         data: {
-          userId: userId,
-          plan: {
-            morningMeal: {
-              ingredients: mealPlanDTO.morningMealIngredients,
-              instructions: mealPlanDTO.morningMealInstructions || '',
-            },
-            eveningMeal: {
-              ingredients: mealPlanDTO.eveningMealIngredients,
-              instructions: mealPlanDTO.eveningMealInstructions || '',
-            },
-            nightMeal: {
-              ingredients: mealPlanDTO.nightMealIngredients,
-              instructions: mealPlanDTO.nightMealInstructions || '',
-            },
-          },
+          userId,
+          ...mealDTO,
         },
       });
+      return meal;
     } catch (error) {
       console.error(error);
-      throw new Error('Error creating meal');
+      throw new HttpException(
+        'Error creating meal',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async updateMeal(mealId: string, mealDTO: Partial<MealDTO>) {
+    try {
+      const existingMeal = await this.databaseServices.meals.findUnique({
+        where: { id: mealId },
+      });
+      if (!existingMeal) {
+        throw new HttpException('Meal not found', HttpStatus.NOT_FOUND);
+      }
+
+      const updatedMeal = await this.databaseServices.meals.update({
+        where: { id: mealId },
+        data: { ...mealDTO },
+      });
+
+      return updatedMeal;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        'Error updating meal',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

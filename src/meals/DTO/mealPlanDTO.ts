@@ -1,24 +1,48 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsBoolean, IsOptional, IsArray } from 'class-validator';
 
-export class MealPlanDTO {
-  @IsString({ each: true })
-  morningMealIngredients: string[];
+export class MealDTO {
+  @IsArray()
+  morningMealIng: string[];
 
-  @IsOptional()
-  @IsString()
-  morningMealInstructions?: string;
+  @IsArray()
+  nightMealIng: string[];
 
-  @IsString({ each: true })
-  eveningMealIngredients: string[];
-
-  @IsOptional()
-  @IsString()
-  eveningMealInstructions?: string;
-
-  @IsString({ each: true })
-  nightMealIngredients: string[];
+  @IsArray()
+  eveningMealIng: string[];
 
   @IsOptional()
   @IsString()
-  nightMealInstructions?: string;
+  morningMealIns?: string;
+
+  @IsOptional()
+  @IsString()
+  nightMealIns?: string;
+
+  @IsOptional()
+  @IsString()
+  eveningMealIns?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  morningMealPrep?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  nightMealPrep?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  eveningMealPrep?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  morningMealDel?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  nightMealDel?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  eveningMealDel?: boolean;
 }
