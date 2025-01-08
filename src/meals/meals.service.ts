@@ -51,4 +51,19 @@ export class MealsService {
       );
     }
   }
+
+  async getMealById(mealId: string) {
+    try {
+      const meal = await this.databaseServices.meals.findUnique({
+        where: { id: mealId },
+      });
+      return meal;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        'Error retrieving meal',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

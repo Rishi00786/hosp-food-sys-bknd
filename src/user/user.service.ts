@@ -40,4 +40,8 @@ export class UserService {
       );
     }
   }
+
+  async getUserById(userId: string) {
+    return this.databaseSevervices.user.findUnique({ where: { id: userId } });
+  }
 }

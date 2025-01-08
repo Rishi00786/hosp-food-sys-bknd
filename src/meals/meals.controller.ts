@@ -53,4 +53,21 @@ export class MealsController {
       );
     }
   }
+
+  @Get(':mealId')
+  async getMealById(@Param('mealId') mealId: string) {
+    try {
+      const meal = await this.mealsService.getMealById(mealId);
+      if (!meal) {
+        throw new HttpException('Meal not found', HttpStatus.NOT_FOUND);
+      }
+      return meal;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        'Error retrieving meal',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

@@ -45,4 +45,8 @@ export class MealDTO {
   @IsOptional()
   @IsBoolean()
   eveningMealDel?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  assigned?: boolean;
 }

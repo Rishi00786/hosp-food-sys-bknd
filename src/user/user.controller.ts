@@ -39,4 +39,17 @@ export class UserController {
       return { message: 'Error updating user', error };
     }
   }
+
+  @Get(':userId')
+  async getUserById(@Param('userId') userId: string) {
+    try {
+      const user = await this.userService.getUserById(userId);
+      if (!user) {
+        return { message: 'User not found' };
+      }
+      return user;
+    } catch (error) {
+      return { message: 'Error retrieving user', error };
+    }
+  }
 }
