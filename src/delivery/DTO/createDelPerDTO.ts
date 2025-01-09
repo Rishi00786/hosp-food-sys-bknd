@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsUUID, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 
 export class CreateDelPerDTO {
   @IsString()
@@ -9,7 +9,5 @@ export class CreateDelPerDTO {
   @IsNotEmpty({ message: 'Contact is required' })
   contact: string;
 
-  @IsUUID('4', { message: 'Meal ID must be a valid UUID' })
-  @IsOptional()
-  mealId?: string;
+  mealId: string;
 }

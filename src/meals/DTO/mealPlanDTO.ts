@@ -49,4 +49,8 @@ export class MealDTO {
   @IsOptional()
   @IsBoolean()
   assigned?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  assignedToDel?: boolean;
 }

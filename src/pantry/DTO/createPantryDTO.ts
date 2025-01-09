@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsUUID, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 
 export class CreatePantryDTO {
   @IsString()
@@ -7,13 +7,11 @@ export class CreatePantryDTO {
 
   @IsString()
   @IsNotEmpty({ message: 'Location is required' })
-  Location: string;
+  location: string;
 
   @IsString()
   @IsNotEmpty({ message: 'Contact information is required' })
-  Contact: string;
+  contact: string;
 
-  @IsUUID('4', { message: 'Meal ID must be a valid UUID' })
-  @IsOptional()
-  mealId?: string;
+  mealId?: string[];
 }
